@@ -1,10 +1,12 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
+
+
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     System.out.println("Comp4004, Let's Play");
@@ -12,7 +14,18 @@ public class Main {
     }
 
     public int get_num_players(){
-        return 0;
+
+
+        // uncomment for dynamism. the number of players is 4
+        int num_players = 4;
+
+//        Scanner get_num = new Scanner(System.in);
+//        System.out.println("Enter Number of Players: ");
+//        num_players = get_num.nextInt();
+//
+//        get_num.close();
+
+        return num_players;
     }
 
 

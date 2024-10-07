@@ -20,8 +20,7 @@ class MainTest {
         assertEquals(4, num_players);
     }
 
-
-    // check deck size test 2
+    // test2 -  check deck size
 
 
     // check for duplicates

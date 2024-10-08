@@ -1,5 +1,7 @@
 package org.example;
 
+
+
 import java.util.Scanner;
 
 public class Main {
@@ -10,6 +12,12 @@ public class Main {
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     System.out.println("Comp4004, Let's Play");
+
+    Main game = new Main();
+
+    //game.get_num_players();
+    //game.populate_adventure_deck();
+    //game.populate_event_deck();
 
     }
 
@@ -29,12 +37,23 @@ public class Main {
     }
 
 
-    public void populate_deck(){
+    public void populate_adventure_deck(){
+
     }
 
-    public int deck_size(){
+    public int get_adventure_deck_size(){
         return 0;
     }
+
+
+    public void populate_event_deck(){
+
+    }
+
+    public int get_event_deck_size(){
+        return 0;
+    }
+
 
 
 }

@@ -12,18 +12,32 @@ class MainTest {
     @Test
     @DisplayName("Check Number Of Players is 4")
     void R_test1(){
-
-        Main game = new Main();
-
         // test 1, there should be 4 players
+        Main game = new Main();
         int num_players = game.get_num_players();
         assertEquals(4, num_players);
     }
 
-    // test2 -  check deck size
+    // test2 -  check adventure deck size (100)
+    @Test
+    @DisplayName("Check Adventure Deck Size is 100")
+    void R_test2(){
+        // there should be 100 adventure cards
+        Main game = new Main();
+        int adv_deck_size = game.get_adventure_deck_size();
+        assertEquals(100, adv_deck_size);
+    }
 
 
-    // check for duplicates
+    // test3 -  check event deck size (17)
+    @Test
+    @DisplayName("Check Event Deck Size is 17")
+    void R_test3(){
+        //  there should be 17 event cards
+        Main game = new Main();
+        int event_deck_size = game.get_event_deck_size();
+        assertEquals(17, event_deck_size);
+    }
 
 
 

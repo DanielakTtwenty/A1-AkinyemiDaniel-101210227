@@ -24,6 +24,7 @@ class MainTest {
     void R_test2(){
         // there should be 100 adventure cards
         Main game = new Main();
+        game.populate_adventure_deck();
         int adv_deck_size = game.get_adventure_deck_size();
         assertEquals(100, adv_deck_size);
     }
@@ -35,11 +36,10 @@ class MainTest {
     void R_test3(){
         //  there should be 17 event cards
         Main game = new Main();
+        game.populate_event_deck();
         int event_deck_size = game.get_event_deck_size();
         assertEquals(17, event_deck_size);
     }
-
-
 
     //
 }

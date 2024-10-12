@@ -28,6 +28,8 @@ public class Main {
     private List<Cards> adventure_deck = new ArrayList<Cards>();
     private List<Cards> event_deck = new ArrayList<Cards>();
 
+    private List<Players> players = new ArrayList<Players>();
+
     public int get_num_players(){
 
 
@@ -195,9 +197,22 @@ public class Main {
 //        }
 
     }
+
     public int get_event_deck_size(){
         return event_deck.size();
     }
+
+    public void populate_player_hands(){
+
+
+    }
+
+    public List<Players> get_players(){
+        return players;
+    }
+
+
+
 
 
 

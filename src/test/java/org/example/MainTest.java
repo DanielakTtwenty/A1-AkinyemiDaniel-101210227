@@ -5,14 +5,18 @@ package org.example;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.awt.desktop.SystemEventListener;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
 
+    // test 1, there should be 4 players
     @Test
     @DisplayName("Check Number Of Players is 4")
     void R_test1(){
-        // test 1, there should be 4 players
+
         Main game = new Main();
         int num_players = game.get_num_players();
         assertEquals(4, num_players);
@@ -41,5 +45,31 @@ class MainTest {
         assertEquals(17, event_deck_size);
     }
 
-    //
+    @Test
+    @DisplayName("All players have 12 cards")
+    void R_test4(){
+        Main game = new Main();
+        game.populate_adventure_deck();
+        game.populate_event_deck();
+        game.populate_player_hands();
+
+        // 0 is true, -1 is false
+        int same_number_cards = 0;
+
+        List<Players> players= game.get_players();
+
+        for(Players player: players){
+
+            if(player.get_player_cards().size() != 12){
+                System.out.println("player hand Size is not 12--->  "+ player.get_player_cards().size());
+                same_number_cards = -1;
+            }
+
+            System.out.println(player.get_player_cards().size());
+        }
+        assertEquals(0, same_number_cards);
+    }
+
+
+
 }

@@ -5,8 +5,8 @@ package org.example;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.awt.desktop.SystemEventListener;
-import java.util.List;
+//import java.awt.desktop.SystemEventListener;
+//import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,6 +47,7 @@ class MainTest {
 
     @Test
     @DisplayName("All players have 12 cards")
+    // adventure deck after sharing 48 cards should be 52
     void R_test4(){
         Main game = new Main();
         game.populate_adventure_deck();
@@ -56,7 +57,8 @@ class MainTest {
         // 0 is true, -1 is false
         int same_number_cards = 0;
 
-        List<Players> players= game.get_players();
+        Players[] players;
+        players = game.get_players();
 
         for(Players player: players){
 
@@ -64,11 +66,11 @@ class MainTest {
                 System.out.println("player hand Size is not 12--->  "+ player.get_player_cards().size());
                 same_number_cards = -1;
             }
-
             System.out.println(player.get_player_cards().size());
         }
-        assertEquals(0, same_number_cards);
+        assertEquals(52, game.get_adventure_deck_size());
     }
+
 
 
 

@@ -21,14 +21,16 @@ public class Main {
     game.get_num_players();
     game.populate_adventure_deck();
     game.populate_event_deck();
+    game.populate_player_hands();
+    //game.print_all_player_cards();
 
     }
 
     // Adventure and Event card decks
-    private List<Cards> adventure_deck = new ArrayList<Cards>();
-    private List<Cards> event_deck = new ArrayList<Cards>();
+    private final List<Cards> adventure_deck = new ArrayList<Cards>();
+    private final List<Cards> event_deck = new ArrayList<Cards>();
 
-    private List<Players> players = new ArrayList<Players>();
+    private Players [] players;
 
     public int get_num_players(){
 
@@ -113,7 +115,7 @@ public class Main {
             adventure_deck.add(new Cards("S",10, (i+1)));
         }
 
-        // Battle axes cards
+        // Battle-axes cards
         for(int i =0; i < 8; i++){
             adventure_deck.add(new Cards("B",15, (i+1)));
         }
@@ -203,17 +205,33 @@ public class Main {
     }
 
     public void populate_player_hands(){
+        // give the game the chosen number of players 4
+        players = new Players[get_num_players()];
 
+        // add all the players and their names
+        for(int i =0; i<get_num_players(); i++){
+            players[i] = new Players(String.format("Player %d", i+1));
+        }
 
+        System.out.println("Before (100) " +adventure_deck.size());
+        // add 12 cards per person
+        for (Players player: players){
+            for(int i =0; i<12; i++){
+                player.get_player_cards().add(adventure_deck.get(0));
+                adventure_deck.remove(0);
+            }
+        }
     }
 
-    public List<Players> get_players(){
+    public void print_all_player_cards(){
+        for(Players player: players){
+            player.print_player_hand();
+        }
+    }
+
+    public Players[] get_players(){
         return players;
     }
-
-
-
-
 
 
 }

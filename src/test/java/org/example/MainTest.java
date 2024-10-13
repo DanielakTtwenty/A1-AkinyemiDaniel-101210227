@@ -71,7 +71,18 @@ class MainTest {
         assertEquals(52, game.get_adventure_deck_size());
     }
 
+    @Test
+    @DisplayName(" The Winnner has 7 shields")
+    void R_test5(){
+        Main game = new Main();
+        game.populate_adventure_deck();
+        game.populate_event_deck();
+        game.populate_player_hands();
 
+        Players p = game.play_game();
+        assertEquals(7,p.get_player_shields());
+
+    }
 
 
 }

@@ -7,7 +7,7 @@ public class Players {
 
     private final String player_name;
     private final List<Cards> player_cards = new ArrayList<Cards>();
-    private final int player_shields = 0;
+    private int player_shields = 0;
 
     public Players(String player_name){
         this.player_name = player_name;
@@ -22,6 +22,15 @@ public class Players {
         return player_shields;
     }
 
+    // setter
+
+    public void set_player_shields(int player_shields){
+
+        if(player_shields < 0){
+            this.player_shields = 0;
+        }
+        this.player_shields = player_shields;
+    }
 
     public List<Cards> get_player_cards(){
         return player_cards;

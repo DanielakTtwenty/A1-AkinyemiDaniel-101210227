@@ -24,6 +24,7 @@ public class Main {
     game.populate_player_hands();
     //game.print_all_player_cards();
 
+
     }
 
     // Adventure and Event card decks
@@ -232,6 +233,11 @@ public class Main {
     public Players[] get_players(){
         return players;
     }
+
+    public Players play_game(){
+        return new Players("A");
+    }
+
 
 
 }

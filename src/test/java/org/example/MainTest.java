@@ -8,6 +8,11 @@ import org.junit.jupiter.api.Test;
 //import java.awt.desktop.SystemEventListener;
 //import java.util.List;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
@@ -71,8 +76,48 @@ class MainTest {
         assertEquals(52, game.get_adventure_deck_size());
     }
 
+
+
     @Test
-    @DisplayName(" The Winnner has 7 shields")
+    @DisplayName("pick two function works, the cards are different, equal size also")
+    // count the number of changed cards, compares it to 2
+    // check size of card
+    void R_Test6(){
+
+        Main game = new Main();
+        game.populate_adventure_deck();
+        game.populate_event_deck();
+        game.populate_player_hands();
+
+        // position
+        int pos =0;
+        int count =0;
+
+        Players [] players = game.get_players();
+
+        Players p1 = players[pos];
+        p1.print_player_hand();
+
+        game.pick_two(pos);
+        Players p2 = players[pos];
+        p2.print_player_hand();
+
+        Set<Cards> simi_cards = new HashSet<Cards>();
+        simi_cards.addAll(p1.get_player_cards());
+
+        for(int i =0; i<12; i++ ){
+            if(simi_cards.add(p2.get_player_cards().get(i))){
+                count++;
+            };
+        }
+
+        System.out.println(count);
+
+        assertEquals(2,count);
+    }
+
+    @Test
+    @DisplayName(" The Winner has 7 shields")
     void R_test5(){
         Main game = new Main();
         game.populate_adventure_deck();
@@ -81,7 +126,6 @@ class MainTest {
 
         Players p = game.play_game();
         assertEquals(7,p.get_player_shields());
-
     }
 
 

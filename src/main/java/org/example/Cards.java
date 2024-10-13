@@ -2,9 +2,9 @@ package org.example;
 
 public class Cards {
 
-    private String card_suit;
-    private int card_value;
-    private int card_number;
+    private final String card_suit;
+    private final int card_value;
+    private final int card_number;
 
     // constructor
     public Cards(String card_suit, int card_value, int card_number){

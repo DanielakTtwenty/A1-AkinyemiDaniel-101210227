@@ -2,10 +2,7 @@ package org.example;
 
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -23,18 +20,20 @@ public class Main {
     game.populate_event_deck();
     game.populate_player_hands();
     //game.print_all_player_cards();
-
+    game.play_game();
 
     }
 
     // Adventure and Event card decks
-    private final List<Cards> adventure_deck = new ArrayList<Cards>();
-    private final List<Cards> event_deck = new ArrayList<Cards>();
+    private final List<Cards> adventure_deck = new ArrayList<>();
+    private final List<Cards> event_deck = new ArrayList<>();
+
+    // repurposed deck for adventure cards
+    private final List<Cards> used_adventure_deck = new ArrayList<>();
 
     private Players [] players;
 
     public int get_num_players(){
-
 
         // uncomment for dynamism. the number of players is 4
         int num_players = 4;
@@ -174,7 +173,7 @@ public class Main {
 
         // Plaque Card
         for(int i =0; i < 1; i++){
-            event_deck.add(new Cards("Plaque",2, (i+1)));
+            event_deck.add(new Cards("Plague",2, (i+1)));
         }
 
         // Queen's Fav  cards
@@ -214,7 +213,8 @@ public class Main {
             players[i] = new Players(String.format("Player %d", i+1));
         }
 
-        System.out.println("Before (100) " +adventure_deck.size());
+        //System.out.println("Before (100) " +adventure_deck.size());
+
         // add 12 cards per person
         for (Players player: players){
             for(int i =0; i<12; i++){
@@ -233,6 +233,30 @@ public class Main {
     public Players[] get_players(){
         return players;
     }
+
+    // draw event card takes the top element frm the deck and returns it
+    // then removes it from the top and adds it to the bottom.
+    public Cards draw_event_card(){
+        Cards card = event_deck.get(0);
+        event_deck.remove(0);
+        event_deck.add(card);
+        return card;
+    }
+
+    // method generates a number from 1-12
+    public int get_rand_num(){
+        Random num = new Random();
+        return num.nextInt(12);
+    }
+
+    // function to remove 2 adventure cards and replace them
+    // function takes player position as int
+    public void pick_two(int pos){
+
+    }
+    // player turn starts from first to last
+    int player_pos = 0;
+
 
     public Players play_game(){
         return new Players("A");

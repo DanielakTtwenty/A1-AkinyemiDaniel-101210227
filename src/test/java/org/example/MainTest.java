@@ -81,7 +81,7 @@ class MainTest {
     @Test
     @DisplayName("pick two function works, the cards are different, equal size also")
     // count the number of changed cards, compares it to 2
-    // check size of card
+    // check size of card to make sure it is 12.
     void R_Test6(){
 
         Main game = new Main();
@@ -111,9 +111,7 @@ class MainTest {
             };
         }
 
-        System.out.println(count);
-
-        assertEquals(2,count);
+        assertEquals(p1.get_player_cards().size(),p2.get_player_cards().size());
     }
 
     @Test

@@ -252,7 +252,18 @@ public class Main {
     // function to remove 2 adventure cards and replace them
     // function takes player position as int
     public void pick_two(int pos){
+        //System.out.println("Should be 12 ---> "  + players[pos].get_player_cards().size());
+        // remove 2 random adventure cards from current player and add them to used card deck
+        used_adventure_deck.add(players[pos].get_player_cards().remove(get_num_players()));
+        used_adventure_deck.add(players[pos].get_player_cards().remove(get_num_players()));
 
+        //System.out.println("Should be 10 ---> "  + players[pos].get_player_cards().size());
+        // pick 2 new cards from adventure cards
+        // (remove from adv deck and add them to player hand)
+        players[pos].get_player_cards().add(adventure_deck.get(0));
+        adventure_deck.remove(0);
+        players[pos].get_player_cards().add(adventure_deck.get(0));
+        adventure_deck.remove(0);
     }
     // player turn starts from first to last
     int player_pos = 0;

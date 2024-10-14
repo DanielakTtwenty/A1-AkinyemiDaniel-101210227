@@ -39,7 +39,7 @@ public class Players {
 
     // print a players cards
     public void print_player_hand(){
-        System.out.println( player_name + "has " + player_shields+ " shields and has these cards: ");
+        System.out.println( player_name + " has " + player_shields+ " shields and has these cards: ");
         for(Cards card : player_cards){
             card.print_card();
         }

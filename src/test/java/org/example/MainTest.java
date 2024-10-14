@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 //import java.awt.desktop.SystemEventListener;
 //import java.util.List;
 
+import java.io.ByteArrayInputStream;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -79,7 +80,7 @@ class MainTest {
 
 
     @Test
-    @DisplayName("pick two function works, the cards are different, equal size also")
+    @DisplayName(" Test pick-two method, the cards are different, equal size also")
     // count the number of changed cards, compares it to 2
     // check size of card to make sure it is 12.
     void R_Test6(){
@@ -93,26 +94,26 @@ class MainTest {
         int pos =0;
         int count =0;
 
+
         Players [] players = game.get_players();
 
         Players p1 = players[pos];
         p1.print_player_hand();
 
+        // deleting cards in index position 0 and 1
+        ByteArrayInputStream checkInput = new ByteArrayInputStream("1\n2\n".getBytes());
+        System.setIn(checkInput);
+
         game.pick_two(pos);
+
         Players p2 = players[pos];
-        p2.print_player_hand();
+        p1.print_player_hand();
 
-        Set<Cards> simi_cards = new HashSet<Cards>();
-        simi_cards.addAll(p1.get_player_cards());
+        assertNotEquals((p1.get_player_cards()), p2.get_player_cards());
 
-        for(int i =0; i<12; i++ ){
-            if(simi_cards.add(p2.get_player_cards().get(i))){
-                count++;
-            };
-        }
-
-        assertEquals(p1.get_player_cards().size(),p2.get_player_cards().size());
     }
+
+
 
     @Test
     @DisplayName(" The Winner has 7 shields")

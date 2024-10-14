@@ -249,27 +249,91 @@ public class Main {
         return num.nextInt(12);
     }
 
+    public int del_player_input(Scanner card_pos){
+        int pos =0;
+        do{
+            System.out.println("Please Enter Number from 1 - 12");
+            pos = card_pos.nextInt();
+        }while(pos<1 || pos >12);
+
+        return pos-1;
+    }
+
     // function to remove 2 adventure cards and replace them
     // function takes player position as int
     public void pick_two(int pos){
-        //System.out.println("Should be 12 ---> "  + players[pos].get_player_cards().size());
-        // remove 2 random adventure cards from current player and add them to used card deck
-        used_adventure_deck.add(players[pos].get_player_cards().remove(get_num_players()));
-        used_adventure_deck.add(players[pos].get_player_cards().remove(get_num_players()));
 
-        //System.out.println("Should be 10 ---> "  + players[pos].get_player_cards().size());
-        // pick 2 new cards from adventure cards
-        // (remove from adv deck and add them to player hand)
-        players[pos].get_player_cards().add(adventure_deck.get(0));
-        adventure_deck.remove(0);
-        players[pos].get_player_cards().add(adventure_deck.get(0));
-        adventure_deck.remove(0);
     }
+
+
     // player turn starts from first to last
     int player_pos = 0;
 
-
     public Players play_game(){
+        boolean flag = true;
+
+        // Currently drawn event card
+        Cards curr_event_card;
+
+        // make sure player_pos is always less that num_players
+        if(player_pos >= get_num_players()){
+            player_pos =0;
+        }
+
+        while(flag){
+
+            // player in current position draws event card
+            curr_event_card = draw_event_card();
+
+            // print player and player position
+            System.out.println(players[player_pos].get_player_name() + " current position: " + player_pos);
+
+            // print the card the player picked
+            System.out.print(players[player_pos].get_player_name() + " picked ");
+            curr_event_card.print_card();
+
+            // if the card is a plague card lose 2 shields
+            if(curr_event_card.get_card_suit().equals("Plague")){
+                players[player_pos].set_player_shields(players[player_pos].get_player_shields()-2);
+            }
+
+
+            //if the card drawn by current player is Queen's Favor pick 2 adventure cards
+            // remember a player can only have 12 adventure cards
+            // so the player will drop 2 adventure cards also. //add to used_ad..._deck
+            if(curr_event_card.get_card_suit().equals("Queen's Favor")){
+                players[player_pos].print_player_hand();
+                pick_two(player_pos);
+                players[player_pos].print_player_hand();
+            }
+
+            //if the card drawn by current player is Prosperity, everyone picks 2 adventure cards
+            // everyone drops 2 adv cards and picks 2
+            if(curr_event_card.get_card_suit().equals("Prosperity")){
+                for(int i =0; i<get_num_players(); i++){
+                    pick_two(i);
+                }
+            }
+
+            // check if the card suit is "Q"
+            // then solve accordingly
+            if(curr_event_card.get_card_suit().equals("Q")){
+                System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+            }
+
+
+            // check if adventure deck < 8
+            // only 6 adventure cards would be needed at most for an event
+            // take the cards in used-adventure-deck, add to adventure deck and shuffle
+            if (adventure_deck.size() < 8){
+                Collections.shuffle(used_adventure_deck);
+                adventure_deck.addAll(used_adventure_deck);
+                used_adventure_deck.clear();
+            }
+
+            flag = false;
+        }
+
         return new Players("A");
     }
 

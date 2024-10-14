@@ -101,18 +101,22 @@ class MainTest {
         p1.print_player_hand();
 
         // deleting cards in index position 0 and 1
-        ByteArrayInputStream checkInput = new ByteArrayInputStream("1\n2\n".getBytes());
+        ByteArrayInputStream checkInput = new ByteArrayInputStream("1\n1\n".getBytes());
         System.setIn(checkInput);
+
+        Players p2 = new Players("New Player 1");
+        p2.get_player_cards().addAll(p1.get_player_cards());
+        p2.print_player_hand();
 
         game.pick_two(pos);
 
-        Players p2 = players[pos];
         p1.print_player_hand();
+        p2.print_player_hand();
 
-        assertNotEquals((p1.get_player_cards()), p2.get_player_cards());
-
+        assertNotEquals(p1.get_player_cards(), p2.get_player_cards());
     }
 
+    
 
 
     @Test

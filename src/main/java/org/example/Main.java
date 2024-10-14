@@ -262,6 +262,26 @@ public class Main {
     // function to remove 2 adventure cards and replace them
     // function takes player position as int
     public void pick_two(int pos){
+        // pick 2 new cards from adventure cards
+        // (remove from adv deck and add them to player hand)
+
+        players[pos].get_player_cards().add(adventure_deck.get(0));
+        adventure_deck.remove(0);
+        players[pos].get_player_cards().add(adventure_deck.get(0));
+        adventure_deck.remove(0);
+
+        System.out.println("Enter 2 numbers of cards to delete");
+        Scanner delete_card_pos = new Scanner(System.in);
+
+        int c1 = del_player_input(delete_card_pos);
+        int c2 = del_player_input(delete_card_pos);
+
+        System.out.println("Should be 14 ---> "  + players[pos].get_player_cards().size());
+        // remove the 2 cards that the player picked
+        used_adventure_deck.add(players[pos].get_player_cards().remove(c1));
+        used_adventure_deck.add(players[pos].get_player_cards().remove(c2));
+
+        System.out.println("Should be 12 ---> "  + players[pos].get_player_cards().size());
 
     }
 

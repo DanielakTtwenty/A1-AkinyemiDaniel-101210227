@@ -104,7 +104,7 @@ class MainTest {
         ByteArrayInputStream checkInput = new ByteArrayInputStream("1\n1\n".getBytes());
         System.setIn(checkInput);
 
-        Players p2 = new Players("New Player 1");
+        Players p2 = new Players("New Player 1", 1);
         p2.get_player_cards().addAll(p1.get_player_cards());
         p2.print_player_hand();
 
@@ -116,7 +116,10 @@ class MainTest {
         assertNotEquals(p1.get_player_cards(), p2.get_player_cards());
     }
 
-    
+
+
+
+
 
 
     @Test

@@ -7,10 +7,14 @@ public class Players {
 
     private final String player_name;
     private final List<Cards> player_cards = new ArrayList<Cards>();
+
+    private final int player_position;
+
     private int player_shields = 0;
 
-    public Players(String player_name){
+    public Players(String player_name,int player_position){
         this.player_name = player_name;
+        this.player_position = player_position;
     }
 
     // getter
@@ -22,8 +26,11 @@ public class Players {
         return player_shields;
     }
 
-    // setter
+    public int get_player_pos(){
+        return player_position;
+    }
 
+    // setter
     public void set_player_shields(int player_shields){
 
         if(player_shields < 0){
@@ -39,10 +46,14 @@ public class Players {
 
     // print a players cards
     public void print_player_hand(){
-        System.out.println( player_name + " has " + player_shields+ " shields and has these cards: ");
+        System.out.println(player_name + " position number: " + player_position +" has " + player_shields+ " shields and has these cards: ");
+        int i =0;
         for(Cards card : player_cards){
+            System.out.print(i+1 + ". ");
             card.print_card();
+            i++;
         }
+
     }
 
 

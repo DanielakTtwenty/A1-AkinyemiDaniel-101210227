@@ -130,8 +130,17 @@ class MainTest {
         game.populate_event_deck();
         game.populate_player_hands();
 
-        Players p = game.play_game();
-        assertEquals(7,p.get_player_shields());
+        game.play_game();
+
+        boolean there_is_a_winner = false;
+
+        for( Players p: game.get_players()){
+
+            if(p.get_player_shields()>=7){
+                there_is_a_winner = true;
+            }
+        }
+        assertTrue(there_is_a_winner);
     }
 
 

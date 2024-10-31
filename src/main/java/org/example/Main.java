@@ -4,10 +4,10 @@ package org.example;
 
 import java.util.*;
 
+
 public class Main {
 
     public static void main(String[] args) {
-
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
@@ -35,6 +35,9 @@ public class Main {
     // Stages
     // size is meant to be equal to card value
     public ArrayList<ArrayList<Cards>> list_stages = new ArrayList<>();
+
+    // get the total for each stage.
+    ArrayList<Integer> stage_number = new ArrayList<>();
 
     private Players [] players;
 
@@ -195,14 +198,6 @@ public class Main {
         // shuffle deck
         Collections.shuffle(event_deck);
 
-         //print out deck (just to see)
-//        System.out.println("The number of cards == " + event_deck.size());
-//        System.out.println("____________________________");
-//
-//        for(Cards card : event_deck){
-//            card.print_card();
-//        }
-
     }
 
     public int get_event_deck_size(){
@@ -229,11 +224,11 @@ public class Main {
         }
     }
 
-    public void print_all_player_cards(){
-        for(Players player: players){
-            player.print_player_hand();
-        }
-    }
+//    public void print_all_player_cards(){
+//        for(Players player: players){
+//            player.print_player_hand();
+//        }
+//    }
 
     public Players[] get_players(){
         return players;
@@ -363,25 +358,25 @@ public class Main {
     // then remove card from adventure deck
     // ask player for a card to take out
     // take the card out of player deck add to used card deck
-    public void player_draw_adventure_card(int player_pos){
+    public void player_draw_adventure_card(Players p){
 
         Cards c;
 
         // remove card from adventure deck
         // add card to player's hand
-        players[player_pos].get_player_cards().add(adventure_deck.remove(0));
-        players[player_pos].print_player_hand();
+        p.get_player_cards().add(adventure_deck.remove(0));
+        p.print_player_hand();
         lines();
 
         // ask the player for the card to remove
-        System.out.println(String.format("Player%d, pick a card from 1-12 to remove",(player_pos+1)));
+        System.out.println(String.format("Player%d, pick a card from 1-12 to remove", p.get_player_pos()));
 
         Scanner remove_card = new Scanner(System.in);
         int answer = remove_card.nextInt();
 
         // remove the picked card from players hand
         // prints the card removed
-        c = players[player_pos].get_player_cards().remove(answer-1);
+        c = p.get_player_cards().remove(answer-1);
         System.out.print("The card removed is: ");
         c.print_card();
 
@@ -389,8 +384,9 @@ public class Main {
         used_adventure_deck.add(c);
 
         lines();
-        System.out.print(String.format("Player%d new hand: ", player_pos));
-        players[player_pos].print_player_hand();
+        System.out.print(String.format("Player%d new hand: ", p.get_player_pos()));
+        p.print_player_hand();
+        lines();
 
     }
 
@@ -461,9 +457,7 @@ public class Main {
                 checker+= c.get_card_value();
             }
 
-            if(curr_stage_value<checker){
-                return false;
-            }
+            return curr_stage_value >= checker;
         }
 
         return true;
@@ -487,7 +481,7 @@ public class Main {
             ArrayList<Cards> each_stage = new ArrayList<>();
 
             // write the code to pick all the cards for a stage
-            int chosen_card_position = -1;
+            int chosen_card_position;
 
             while(true){
 
@@ -518,7 +512,7 @@ public class Main {
 
             // check if stage is accepted or do it again
             boolean stage_is_accepted = stage_selection_is_accepted(each_stage);
-            String keep_playing = "";
+            String keep_playing;
 
             // if the stage is not accepted, ask to do the process again or break
             if(!stage_is_accepted) {
@@ -594,11 +588,13 @@ public class Main {
         }
 
         System.out.println("Print all the stages to verify");
-        // print all stages to verify this correct
 
+        // print all stages to verify this correct
         for(int i=0; i<list_stages.size(); i++){
             print_stages(list_stages.get(i), i);
         }
+
+        get_stage_total();
 
         // if true add the cards from store bin to used adventure deck
         used_adventure_deck.addAll(store_checker);
@@ -609,7 +605,9 @@ public class Main {
 
         Scanner will_partake = new Scanner(System.in);
 
+
         Iterator<Players> willing_participant_itr= willing_participants.iterator();
+
         while(willing_participant_itr.hasNext()){
 
             System.out.println("Player do you want to partake in this round: yes/no");
@@ -617,33 +615,154 @@ public class Main {
             Players willing_participant = willing_participant_itr.next();
 
             if(answer.equals("no")){
-                lines();
                 System.out.println(String.format("Player%d will not participate", willing_participant.get_player_pos()));
+                lines();
+
                 willing_participant_itr.remove();
             }
 
             if(answer.equals("yes")){
-                lines();
                 System.out.println(String.format("Player%d will participate", willing_participant.get_player_pos()));
+                lines();
             }
        }
 
         return willing_participants;
     }
 
-    public Players play_game(){
-        boolean flag = true;
+    public void get_stage_total(){
+
+        for(int i=0; i<list_stages.size(); i++){
+
+            int stage_total = 0;
+            for(int j = 0; j<list_stages.get(i).size(); j++){
+                stage_total+=list_stages.get(i).get(j).get_card_value();
+            }
+            stage_number.add(stage_total);
+        }
+
+        lines();
+
+        for(Integer x: stage_number){
+            System.out.println("Stage total: " + x);
+        }
+    }
+
+    public void attack_Stage(ArrayList<Players> willing_participants, int quest_shields) {
+
+        // got stage by stage then ask each willing_participants for their attack cards and get the attack total
+        Scanner pick_cards = new Scanner(System.in);
+
+        lines();
+        System.out.println(" This is attack_stage function");
+
+
+        for (int i =0; i<stage_number.size(); i++){
+
+
+            //unreachable number
+            ArrayList<Integer> lost_stage_participants = new ArrayList<>();
+
+            System.out.println(String.format("Stage%d, Attack!!!!", (i+1)));
+
+            // ask all willing participants for their attack cards
+            lines();
+            System.out.println("Asking willing participants to Attack: Stage"+ (i+1));
+            lines();
+
+            for (int k = 0; k < willing_participants.size(); k++) {
+
+                int chosen_card_position;
+                int attack_value = 0;
+
+                while (true) {
+
+                    willing_participants.get(k).print_player_hand();
+                    System.out.println("Stage number -> "+ stage_number.get(i));
+                    lines();
+
+                    System.out.println(String.format("Pick the card to attack from 1-%d, or 0 to submit attack", willing_participants.get(k).get_player_cards().size()));
+                    chosen_card_position = pick_cards.nextInt();
+
+                    if (chosen_card_position >= 1 && chosen_card_position <= 12) {
+
+                        /// add card value to attack total //print card
+                        attack_value += willing_participants.get(k).get_player_cards().get(chosen_card_position-1).get_card_value();
+                        willing_participants.get(k).get_player_cards().get(chosen_card_position-1).print_card();
+
+                        // remove card from player hand and add to used adventure card list
+                        used_adventure_deck.add(willing_participants.get(k).get_player_cards().remove(chosen_card_position-1));
+                    }
+
+                    if (chosen_card_position == 0) {
+                        System.out.println(String.format("Player%d is done attacking ",willing_participants.get(k).get_player_pos()));
+                        lines();
+                        break;
+                    }
+                }
+
+                // if players attack value for a stage < the stage value of the sponsor
+                // remove them for willing participants
+                // Cannot carry on playing
+                if (attack_value < stage_number.get(i)){
+
+                    //this list stores the positions of players that lost the stage.
+                    // to be removed at the end of for loop (stage)
+                    lost_stage_participants.add(k);
+                    System.out.println(String.format("Player%d is done playing and will not be moving to the next stage", willing_participants.get(k).get_player_pos()));
+                    lines();
+                }
+                else{
+                    System.out.println(String.format("Player%d is moving to the next stage", willing_participants.get(k).get_player_pos()));
+                    lines();
+                }
+
+                // at the last stage, if player attack is > stage value of sponsor,
+                // add the quest value to winners shield total
+                if(attack_value >= stage_number.get(i) && i== stage_number.size()-1) {
+                    System.out.println(String.format("Player%d had won %d shields",willing_participants.get(k).get_player_pos(),quest_shields));
+                    lines();
+                    willing_participants.get(k).set_player_shields((willing_participants.get(k).get_player_shields())+quest_shields);
+                }
+            }
+
+            // remove all willing participants that lost after stage is complete
+            if(!lost_stage_participants.isEmpty()){ // someone lost a round
+                for(int x: lost_stage_participants){
+                    willing_participants.remove(x);
+                }
+            }
+
+            if(willing_participants.isEmpty()){
+                System.out.println("No more willing participants passed all the stages. ");
+                break;
+            }
+
+        }
+    }
+
+    public boolean found_winners(){
+
+        boolean flag = false;
+
+        for(Players p: players){
+            if(p.get_player_shields() >= 7){
+                System.out.println(String.format("Player%d, has won with %d shields ",p.get_player_pos(),p.get_player_shields()));
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
+    public void play_game(){
+
         int player_pos =0;
 
         // Currently drawn event card
         Cards curr_event_card;
 
-        // make sure player_pos is always less that num_players
-        if(player_pos >= get_num_players()){
-            player_pos =0;
-        }
 
-        while(flag){
+        while((!found_winners())){
 
             // player in current position draws event card
             curr_event_card = draw_event_card();
@@ -657,37 +776,36 @@ public class Main {
             curr_event_card.print_card();
 
 
-            // if the card is a plague card lose 2 shields
-//            if(curr_event_card.get_card_suit().equals("Plague")){
-            
-//                lines();
-                  //players[player_pos].print_player_hand();
-//                players[player_pos].set_player_shields(players[player_pos].get_player_shields()-2);
+             // if the card is a plague card lose 2 shields
+            if(curr_event_card.get_card_suit().equals("Plague")){
+                lines();
+                players[player_pos].print_player_hand();
+                players[player_pos].set_player_shields(players[player_pos].get_player_shields()-2);
 
-                  //lines();
-                  //players[player_pos].print_player_hand();
-//
-//            }
+                lines();
+                players[player_pos].print_player_hand();
+            }
 
-            //if the card drawn by current player is Queen's Favor pick 2 adventure cards
+            // if the card drawn by current player is Queen's Favor pick 2 adventure cards
             // remember a player can only have 12 adventure cards
             // so the player will drop 2 adventure cards also. //add to used_ad..._deck
-            //if(curr_event_card.get_card_suit().equals("Queen's Favor")){
-//                lines();
-//                players[player_pos].print_player_hand();
-//                pick_two(player_pos);
-//                lines();
-//                players[player_pos].print_player_hand();
-//            }
-//
+            if(curr_event_card.get_card_suit().equals("Queen's Favor")){
+                lines();
+                players[player_pos].print_player_hand();
+                pick_two(player_pos);
+
+                lines();
+                players[player_pos].print_player_hand();
+            }
+
             //if the card drawn by current player is Prosperity, everyone picks 2 adventure cards
             // everyone drops 2 adv cards and picks 2
-//            if(curr_event_card.get_card_suit().equals("Prosperity")){
-//                lines();
-//                for(int i =0; i<get_num_players(); i++){
-//                    pick_two(i);
-//                }
-//            }
+            if(curr_event_card.get_card_suit().equals("Prosperity")){
+                lines();
+                for(int i =0; i<get_num_players(); i++){
+                    pick_two(i);
+                }
+            }
 
             if(curr_event_card.get_card_suit().equals("Q")) {
 
@@ -705,8 +823,7 @@ public class Main {
                 if(current_sponsor_pos == -1 ){
                     player_pos++;
                     player_pos = (player_pos) % get_num_players();
-                    //continue;  // uncomment when running full simulation
-                    break;
+                    continue;
                 }
 
                 // and player start quest
@@ -723,8 +840,7 @@ public class Main {
                 if(!was_quest_build_successful){
                     player_pos++;
                     player_pos = (player_pos) % get_num_players();
-                    //continue;  // uncomment when running full simulation
-                    break;
+                    continue;
                 }
                 // play game
                 else{
@@ -741,57 +857,66 @@ public class Main {
                         }
                     }
 
-                    // looping per stage
-                    // this is where game objective is close
-                    for(int i =0; i<willing_participants.size(); i++){
+                    lines();
+                    System.out.println("Are you going to play quest:  ");
+                    willing_participants = find_willing_participants(willing_participants);
 
-                        // call the function here
-                        // play game with only the guys that are ready to play
-                        lines();
-                        System.out.println("Are you going to Play:  ");
-                        willing_participants = find_willing_participants(willing_participants);
+                    lines();
+                    System.out.println("Willing Participants For This Stage ");
 
-                        lines();
-                        System.out.println("Willing Participants For Stage 1");
+                    // if there are willing participants, then draw a card
+                    if(!willing_participants.isEmpty()){
+                        for(Players p: willing_participants){
 
-                        if(!willing_participants.isEmpty()){
-                            for(Players p: willing_participants){
-
-                                // draw adventure card 
-                                player_draw_adventure_card(p.get_player_pos());
-                                System.out.println(p.get_player_name());
-                            }
+                            // draw adventure card
+                            player_draw_adventure_card(p);
                         }
-
-                        // players for round have been picked, pick winner etc.
-                        // adventure card has been drawn also
                     }
+
+                    // players for round have been picked, pick winner etc.
+                    // adventure card has been drawn also
+                    attack_Stage(willing_participants, curr_event_card.get_card_value());
+
+                    // quest winner has possibly been chosen,
+                    // print player shields and player card size after attack
+                    for(Players p: players){
+                        System.out.println(String.format("Player%d has %d shields and %d cards",p.get_player_pos(),p.get_player_shields(),p.get_player_cards().size() ));
+                    }
+                    lines();
+
+                    // checks if each player has less than 12 cards
+                    // resizes player cards
+                    for(Players p: players){
+
+                        while (p.get_player_cards().size() < 12){
+                            //if player hand size is < 12 add card to players hand
+                            p.get_player_cards().add(used_adventure_deck.remove(0));
+                        }
+                    }
+
+                    // this is after resizing player cards to 12
+                    // adventure deck should be 52 after this
+                    for(Players p: players){
+                        System.out.println(String.format("Player%d has %d shields and %d cards",p.get_player_pos(),p.get_player_shields(),p.get_player_cards().size() ));
+                    }
+                    lines();
                 }
             }
 
-            // check if adventure deck < 8
-            // only 6 adventure cards would be needed at most for an event
-            // take the cards in used-adventure-deck, add to adventure deck and shuffle
-            if (adventure_deck.size() < 8){
+            player_pos = (player_pos) % get_num_players();
 
-                lines();
-                System.out.println("Adventure deck running low, shuffle old cards and add");
+            // after every stage, clear everything that needs to be cleared
+            stage_number.clear();
+            list_stages.clear();
 
-                Collections.shuffle(used_adventure_deck);
-                adventure_deck.addAll(used_adventure_deck);
-                used_adventure_deck.clear();
+            // add all used cards to adventure deck, adventure deck should be 52.
+            adventure_deck.addAll(used_adventure_deck);
+            Collections.shuffle(adventure_deck);
 
-            }
+            used_adventure_deck.clear();
+            System.out.println("Adventure deck should be 52 --> " + adventure_deck.size());
 
-            // to make sure the player_pos goes in circles until the game is over
-            // or not need anymore
-
-            // uncomment, obviouly player position will start changing
-            //player_pos = (player_pos) % get_num_players();
-
-
-            flag = false;
+            player_pos++;
         }
-        return new Players("A",1);
     }
 }
